@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wwj.dao.PersonDao">
+
+
+	<resultMap type="com.wwj.model.Person" id="personRS">
+		<!--column指向数据库列名 property指向pojo对象中字段名 -->
+		<result column="name" property="name" />
+		<!-- property指的是在bean中字段名 ofType类的全定向名 -->
+		<collection property="cards" ofType="com.wwj.model.Card">
+			<result column="cname" property="cname" />
+		</collection>
+	</resultMap>
+
+	<insert id="savePerson" parameterType="com.wwj.model.Person">
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			select
+			last_insert_id()
+		</selectKey>
+		insert into
+		person(name,address,bir) values(#{name},#{address},#{bir});
+	</insert>
+
+	<update id="updatePerson" parameterType="com.wwj.model.Person">
+		update person set
+		name=#{name},address=#{address},bir=#{bir}
+		where id=#{id}
+	</update>
+
+	<delete id="deletePersonById" parameterType="int">
+		delete from person
+		where id=#{id}
+	</delete>
+
+
+	<select id="getPersonInfos" resultType="com.wwj.model.Person">
+		select * from person
+	</select>
+
+	<select id="getPersonInfosByNameAndID">
+		select * from person
+		where name = #{0} and id = #{1}
+	</select>
+
+	<select id="getPersonInfosByMap" parameterType="java.util.Map"
+		resultType="com.wwj.model.Person">
+		select * from person where id =
+		#{id} and name = #{name}
+	</select>
+
+	<select id="getPersonInfo" resultType="com.wwj.model.Person">
+		select * from person where
+		id =
+		#{pid}
+	</select>
+
+	<sql id="nameCol"> name</sql>
+	<select id="getPersonName" resultType="java.lang.String">
+		select
+		<include refid="nameCol"></include>
+		from person where
+		id =
+		#{pid}
+	</select>
+
+
+	<select id="getPersonsOfCard" resultMap="personRS">
+		select
+		person.name,card.cname
+		from person
+		INNER JOIN card
+		on person.id = card.pid
+	</select>
+
+</mapper>

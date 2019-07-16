@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 数据库连接环境配置 -->
+	<environments default="development">
+		<!-- 标明mybaitis环境 id唯一 -->
+		<environment id="development">
+			<!-- JDBC – 这个配置直接简单使用了 JDBC 的提交和回滚设置。 它依赖于从数据源得 到的连接来管理事务范围。JDBC默认是自动提交 -->
+			<transactionManager type="JDBC" />
+			<!-- 采用数据库连接池 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<!-- 避免环境的不统一，造成数据操作乱码 -->
+				<property name="url"
+					value="jdbc:mysql://localhost:3306/mybatis?useUnicod=true&amp;characterEncoding=utf8" />
+				<property name="username" value="root" />
+				<property name="password" value="root" />
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 添加需要被映射的文件 -->
+	<mappers>
+		<mapper resource="com/wwj/dao/PersonMapper.xml" />
+	</mappers>
+</configuration>
