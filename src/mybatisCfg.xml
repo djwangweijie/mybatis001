@@ -3,6 +3,12 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+  <settings>
+    <!-- 启用延迟加载特性，不配置默认关闭该特性-->
+    <setting name="lazyLoadingEnabled" value="true"></setting>
+    <!-- 按需加载: false:使用关联属性，及时加载;    true,加载对象，则加载所有属性， -->
+     <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
 	<!-- 数据库连接环境配置 -->
 	<environments default="development">
 		<!-- 标明mybaitis环境 id唯一 -->
@@ -23,5 +29,11 @@
 	<!-- 添加需要被映射的文件 -->
 	<mappers>
 		<mapper resource="com/wwj/dao/PersonMapper.xml" />
+		<mapper resource="com/wwj/dao/UserMapper.xml" />
+		<mapper resource="com/wwj/dao/PostMapper.xml" />
+		<mapper resource="com/wwj/dao/Animal_InterestMapper.xml" />
+		<mapper resource="com/wwj/dao/AnimalMapper.xml" />
+		<mapper resource="com/wwj/dao/InterestMapper.xml" />
+		<mapper resource="com/wwj/dao/TestUserMapper.xml" />
 	</mappers>
 </configuration>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wwj.dao.Animal_InterestDao">
+	<resultMap type="com.wwj.model.Animal" id="animals">
+		<id property="aid" column="aid" />
+		<result column="aname" property="aname" />
+	</resultMap>
+
+	<resultMap type="com.wwj.model.Interest" id="interests">
+		<id property="iid" column="iid" />
+		<result column="iname" property="iname" />
+	</resultMap>
+
+	<select id="getAnimalByIid" parameterType="int" resultMap="animals">
+		select
+		a.*,ai.iid
+		from animal a,animal_interest ai
+		where a.aid = ai.aid
+		and ai.iid = #{iid}
+	</select>
+
+	<select id="getInterestByAid" parameterType="int" resultMap="interests">
+		select
+		i.*,ai.aid
+		from interest i,animal_interest ai
+		where i.iid = ai.iid
+		and ai.aid = #{aid}
+	</select>
+</mapper>

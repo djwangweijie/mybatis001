@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wwj.dao.UserDao">
+
+	<!-- 定义一对多的resultmap -->
+
+	<resultMap type="com.wwj.model.TestUser" id="tuser">
+		<id property="tid" column="tid" />
+		<result column="tname" property="tname" />
+		<result column="tage" property="tage" />
+	</resultMap>
+
+	<select id="getUser" resultMap="tuser">
+		select  * from testuser
+		where 
+	   <if test="tname != null">
+           tname=#{tname}
+        </if>     
+        <if test="tage != null">
+           and tage=#{tage}
+        </if>
+	</select>
+	
+	<!-- where”标签会知道如果它包含的标签中有返回值的话，它就插入一个‘where’。此外，如果标签返回的内容是以AND 或OR 开头的，则它会剔除掉。 -->
+	<select id="getUserUseWhere" resultMap="tuser">
+		select  * from testuser
+		<where>
+	   <if test="tname != null">
+           tname=#{tname}
+        </if>     
+        <if test="tage != null">
+           and tage=#{tage}
+        </if>
+        </where>
+        
+        <!--   trim标记是一个格式化的标记，可以完成set或者是where标记的功能
+        prefix：前缀　　　　　　
+		prefixoverride：去掉第一个 
+		suffix：后缀　　
+		suffixoverride：去掉最后一个   
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="username != null">
+               and username=#{username}
+            </if>
+            <if test="sex != null">
+               and sex=#{sex}
+            </if>
+        </trim> -->
+	</select>
+	
+	
+	<update id="updateUserById"  parameterType="java.util.Map">
+    update testuser 
+        <set>
+            <if test="tname != null and tname != ''">
+                tname = #{tname},
+            </if>
+            <if test="tage != null and tage != ''">
+                tage = #{tage}
+            </if>
+        </set>
+     
+     where tid=#{tid}
+</update>
+
+
+<select id="selectUserByChoose"  resultMap="tuser" parameterType="java.util.Map">
+      select * from testuser
+      <where>
+          <choose>
+              <when test="tid !='' and tid != null">
+                  tid=#{tid}
+              </when>
+              <when test="tname !='' and tname != null">
+                  and tname=#{tname}
+              </when>
+              <otherwise>
+                  and tage=#{tage}
+              </otherwise>
+          </choose>
+      </where>
+  </select>
+  
+  <select id="selectUserByListId" resultMap="tuser" parameterType="java.util.List">
+    select * from testuser
+    <where>
+        <!--
+            collection:指定输入对象中的集合属性
+            item:每次遍历生成的对象
+            open:开始遍历时的拼接字符串
+            close:结束时拼接的字符串
+            separator:遍历对象之间需要拼接的字符串
+            select * from user where 1=1 and (id=1 or id=2 or id=3)
+          -->
+        <foreach collection="list" item="tid" open="and (" close=")" separator="or">
+            tid=#{tid}
+        </foreach>
+    </where>
+</select>
+
+
+</mapper>

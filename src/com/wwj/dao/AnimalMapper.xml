@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wwj.dao.AnimalDao">
+
+   <cache/>
+
+	<!-- 定义一对多的resultmap -->
+
+	<resultMap type="com.wwj.model.Animal" id="animals1">
+		<id property="aid" column="aid" />
+		<result column="uname" property="uname" />
+		<collection property="interests"  column="aid" select="com.wwj.dao.Animal_InterestDao.getInterestByAid">
+		</collection>
+	</resultMap>
+
+	<select id="getAnimals" resultMap="animals1" >
+		select a.*
+		from animal a
+	</select>
+
+
+</mapper>
